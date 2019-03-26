@@ -1,50 +1,51 @@
-function SelectionSort(array) {
-    this.arr = array;
-}
-SelectionSort.prototype.less = function (value1, value2) {
+less = function(value1, value2) {
     return value1 < value2;
 };
-SelectionSort.prototype.more = function (value1, value2) {
+
+more = function(value1, value2) {
     return value1 > value2;
 };
-SelectionSort.prototype.sort = function () {
-    var size = this.arr.length;
-    var i;
-    var j;
+
+selectionSort = function(arr, compare) {
+    var size = arr.length;
     var max;
     var temp;
-    for (i = 0; i < size - 1; i++) {
+    for (var i = 0; i < size - 1; i++) {
         max = 0;
-        for (j = 1; j < size - 1 - i; j++) {
-            if (this.arr[j] > this.arr[max]) {
+        for (var j = 1; j < size - i; j++) {
+            if (compare(arr[j], arr[max])) {
                 max = j;
             }
         }
-        temp = this.arr[size - 1 - i];
-        this.arr[size - 1 - i] = this.arr[max];
-        this.arr[max] = temp;
-    }
-};
-SelectionSort.prototype.sort2 = function () {
-    var size = this.arr.length;
-    var i;
-    var j;
-    var min;
-    var temp;
-    for (i = 0; i < size - 1; i++) {
-        min = i;
-        for (j = i + 1; j < size; j++) {
-            if (this.arr[j] < this.arr[min]) {
-                min = j;
-            }
-        }
-        temp = this.arr[i];
-        this.arr[i] = this.arr[min];
-        this.arr[min] = temp;
+        temp = arr[size - 1 - i];
+        arr[size - 1 - i] = arr[max];
+        arr[max] = temp;
     }
 };
 
-var array = [9, 1, 8, 2, 7, 3, 6, 4, 5];
-var bs = new SelectionSort(array);
-bs.sort2();
+selectionSort2 = function(arr, compare) {
+    var size = arr.length;
+    var min;
+    var temp;
+    for (var i = 0; i < size - 1; i++) {
+        min = i;
+        for (var j = i + 1; j < size; j++) {
+            if (compare(arr[min], arr[j])) {
+                min = j;
+            }
+        }
+        temp = arr[i];
+        arr[i] = arr[min];
+        arr[min] = temp;
+    }
+};
+
+//var array = [9, 1, 8, 2, 7, 3, 6, 4, 5];
+var array = [4, 5, 3, 2, 6, 7, 1, 8, 9, 10];
+
+selectionSort(array, more);
 console.log(array);
+
+var array2 = [9, 1, 8, 2, 7, 3, 6, 4, 5];
+selectionSort2(array2, less);
+console.log(array2);

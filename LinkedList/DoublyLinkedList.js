@@ -1,31 +1,34 @@
-function DoublyLinkedListNode(v, nxt, prv) {
-    this.value = v;
-    this.next = nxt;
-    this.prev = prv;
-}
 
 function DoublyLinkedList() {
     this.head = null;
     this.tail = null;
     this.length = 0;
+
+    function Node(v, nxt, prv) {
+        this.value = v;
+        this.next = nxt;
+        this.prev = prv;
+    }
+
+    DoublyLinkedList.Node = Node
 }
 
-DoublyLinkedList.prototype.size = function () {
+DoublyLinkedList.prototype.size = function() {
     return this.length;
 };
 
-DoublyLinkedList.prototype.isEmpty = function () {
+DoublyLinkedList.prototype.isEmpty = function() {
     return this.length === 0;
 };
 
-DoublyLinkedList.prototype.peek = function () {
+DoublyLinkedList.prototype.peek = function() {
     if (this.isEmpty())
-        throw new java.lang.IllegalStateError("EmptyListError");
+        throw new Error("EmptyListError");
     return this.head.value;
 };
 
-DoublyLinkedList.prototype.addHead = function (value) {
-    var newNode = new DoublyLinkedListNode(value, null, null);
+DoublyLinkedList.prototype.addHead = function(value) {
+    var newNode = new DoublyLinkedList.Node(value, null, null);
     if (this.length === 0) {
         this.tail = this.head = newNode;
     }
@@ -37,8 +40,8 @@ DoublyLinkedList.prototype.addHead = function (value) {
     this.length++;
 };
 
-DoublyLinkedList.prototype.addTail = function (value) {
-    var newNode = new DoublyLinkedListNode(value, null, null);
+DoublyLinkedList.prototype.addTail = function(value) {
+    var newNode = new DoublyLinkedList.Node(value, null, null);
     if (this.length === 0) {
         this.head = this.tail = newNode;
     }
@@ -50,9 +53,9 @@ DoublyLinkedList.prototype.addTail = function (value) {
     this.length++;
 };
 
-DoublyLinkedList.prototype.removeHead = function () {
+DoublyLinkedList.prototype.removeHead = function() {
     if (this.isEmpty())
-        throw new java.lang.IllegalStateError("EmptyListError");
+        throw new Error("EmptyListError");
     var value = this.head.value;
     this.head = this.head.next;
     if (this.head == null)
@@ -63,10 +66,11 @@ DoublyLinkedList.prototype.removeHead = function () {
     return value;
 };
 
-DoublyLinkedList.prototype.removeNode = function (key) {
+DoublyLinkedList.prototype.removeNode = function(key) {
     var curr = this.head;
     if (curr == null)
         return false;
+
     if (curr.value === key) {
         this.head = this.head.next;
         this.length--;
@@ -76,7 +80,8 @@ DoublyLinkedList.prototype.removeNode = function (key) {
             this.tail = null;
         return true;
     }
-    while ((curr.next != null)) {
+
+    while (curr.next != null) {
         if (curr.next.value === key) {
             curr.next = curr.next.next;
             if (curr.next == null)
@@ -91,9 +96,9 @@ DoublyLinkedList.prototype.removeNode = function (key) {
     return false;
 };
 
-DoublyLinkedList.prototype.find = function (key) {
+DoublyLinkedList.prototype.find = function(key) {
     var temp = this.head;
-    while ((temp != null)) {
+    while (temp != null) {
         if (temp.value === key)
             return true;
         temp = temp.next;
@@ -101,22 +106,23 @@ DoublyLinkedList.prototype.find = function (key) {
     return false;
 };
 
-DoublyLinkedList.prototype.freeList = function () {
+DoublyLinkedList.prototype.freeList = function() {
     this.head = null;
     this.tail = null;
     this.length = 0;
 };
 
-DoublyLinkedList.prototype.print = function () {
+DoublyLinkedList.prototype.print = function() {
     var temp = this.head;
-    while ((temp != null)) {
-        console.log(temp.value);
+    while (temp != null) {
+        process.stdout.write(temp.value + " ");
         temp = temp.next;
     };
+    process.stdout.write("\n");
 };
 
-DoublyLinkedList.prototype.sortedInsert = function (value) {
-    var temp = new DoublyLinkedListNode(value, null, null);
+DoublyLinkedList.prototype.sortedInsert = function(value) {
+    var temp = new DoublyLinkedList.Node(value, null, null);
     var curr = this.head;
     if (curr == null) {
         this.head = temp;
@@ -127,7 +133,7 @@ DoublyLinkedList.prototype.sortedInsert = function (value) {
         this.head.prev = temp;
         this.head = temp;
     }
-    while ((curr.next != null && curr.next.value > value)) {
+    while (curr.next != null && curr.next.value > value) {
         curr = curr.next;
     };
     if (curr.next == null) {
@@ -143,10 +149,10 @@ DoublyLinkedList.prototype.sortedInsert = function (value) {
     }
 };
 
-DoublyLinkedList.prototype.reverseList = function () {
+DoublyLinkedList.prototype.reverseList = function() {
     var curr = this.head;
     var tempNode;
-    while ((curr != null)) {
+    while (curr != null) {
         tempNode = curr.next;
         curr.next = curr.prev;
         curr.prev = tempNode;
@@ -159,10 +165,10 @@ DoublyLinkedList.prototype.reverseList = function () {
     };
 };
 
-DoublyLinkedList.prototype.removeDuplicate = function () {
+DoublyLinkedList.prototype.removeDuplicate = function() {
     var curr = this.head;
     var deleteMe;
-    while ((curr != null)) {
+    while (curr != null) {
         if ((curr.next != null) && curr.value === curr.next.value) {
             deleteMe = curr.next;
             curr.next = deleteMe.next;
@@ -177,20 +183,20 @@ DoublyLinkedList.prototype.removeDuplicate = function () {
     };
 };
 
-DoublyLinkedList.prototype.copyListReversed = function () {
+DoublyLinkedList.prototype.copyListReversed = function() {
     var dll = new DoublyLinkedList();
     var curr = this.head;
-    while ((curr != null)) {
+    while (curr != null) {
         dll.addHead(curr.value);
         curr = curr.next;
     };
     return dll;
 };
 
-DoublyLinkedList.prototype.copyList = function () {
+DoublyLinkedList.prototype.copyList = function() {
     var dll = new DoublyLinkedList();
     var curr = this.head;
-    while ((curr != null)) {
+    while (curr != null) {
         dll.addTail(curr.value);
         curr = curr.next;
     };

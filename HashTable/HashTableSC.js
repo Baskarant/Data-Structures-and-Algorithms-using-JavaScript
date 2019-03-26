@@ -1,47 +1,66 @@
-function HashTable() {
-    this.tableSize = 512;
-    this.listArray = new Array(this.tableSize);
-    for (var i = 0; i < this.tableSize; i++) {
-        this.listArray[i] = null;
-    }
+function HashTable(cmp, hashFun) {
+    if (cmp === undefined || cmp === null)
+        cmp = this.DefaultCompare;
+    
+    this.comp = cmp;  
 
-    function Node(v, n) {
+    if (hashFun === undefined || hashFun === null)
+        hashFun = this.DefaultHashFun;
+
+    this.HashFun = hashFun;
+
+    this.tableSize = 512;
+    this.listArray = new Array(this.tableSize).fill(null);
+
+    function Node(k, v, n) {
+        this.key = k;
         this.value = v;
         this.next = n;
     }
+    
     HashTable.Node = Node;
 }
 
-HashTable.prototype.ComputeHash = function (key) {
-    var hashValue = 0;
-    hashValue = key;
-    return hashValue % this.tableSize;
+HashTable.prototype.ComputeHash = function(key) {
+    return this.HashFun(key) % this.tableSize;
 };
 
-HashTable.prototype.resolverFun = function (i) {
-    return i;
+HashTable.prototype.resolverFun = function(index) {
+    return index;
 };
 
-HashTable.prototype.resolverFun2 = function (i) {
-    return i * i;
+HashTable.prototype.DefaultCompare = function(first, second) {
+    return first - second;
+}
+
+HashTable.prototype.DefaultHashFun = function(key) {
+    return key;
+}
+
+HashTable.prototype.add = function(key, value) {
+    if (key === undefined || key === null)
+        return false;
+
+    if (value === undefined || value === null)
+        value = key;
+
+    var index = this.ComputeHash(key);
+    this.listArray[index] = new HashTable.Node(key, value,
+        this.listArray[index]);
 };
 
-HashTable.prototype.insert = function (value) {
-    var index = this.ComputeHash(value);
-    this.listArray[index] = new HashTable.Node(value, this.listArray[index]);
-};
-
-HashTable.prototype.delete = function (value) {
-    var index = this.ComputeHash(value);
+HashTable.prototype.delete = function(key) {
+    var index = this.ComputeHash(key);
     var nextNode;
     var head = this.listArray[index];
-    if (head != null && head.value === value) {
+    if (head != null && head.key === key) {
         this.listArray[index] = head.next;
         return true;
     }
-    while ((head != null)) {
+
+    while (head != null) {
         nextNode = head.next;
-        if (nextNode != null && nextNode.value === value) {
+        if (nextNode != null && nextNode.key === key) {
             head.next = nextNode.next;
             return true;
         }
@@ -52,22 +71,27 @@ HashTable.prototype.delete = function (value) {
     return false;
 };
 
-HashTable.prototype.print = function () {
+HashTable.prototype.print = function() {
     for (var i = 0; i < this.tableSize; i++) {
-        console.log("Printing for index value :: " + i + "List of value printing :: ");
         var head = this.listArray[i];
-        while ((head != null)) {
-            console.log(head.value);
+        var data = ""
+
+        while (head != null) {
+            data += (head.value + " ")
             head = head.next;
-        };
+        }
+
+        if (data != "") {
+            console.log("Index value :: " + i + " Data :: " + data);
+        }
     }
 };
 
-HashTable.prototype.find = function (value) {
-    var index = this.ComputeHash(value);
+HashTable.prototype.find = function(key) {
+    var index = this.ComputeHash(key);
     var head = this.listArray[index];
-    while ((head != null)) {
-        if (head.value === value) {
+    while (head != null) {
+        if (head.key === key) {
             return true;
         }
         head = head.next;
@@ -75,11 +99,31 @@ HashTable.prototype.find = function (value) {
     return false;
 };
 
+HashTable.prototype.get = function(key) {
+    var index = this.ComputeHash(key);
+    var head = this.listArray[index];
+    while (head != null) {
+        if (head.key === key) {
+            return head.value;
+        }
+        head = head.next;
+    };
+    return 0;
+};
+
+
 var ht = new HashTable();
-for (var i = 100; i < 110; i++) {
-    ht.insert(i);
+for (var i = 1; i < 110; i++) {
+    ht.add(i);
 }
 console.log("search 100 :: " + ht.find(100));
-console.log("remove 100 :: " + ht.delete(100));
-console.log("search 100 :: " + ht.find(100));
-console.log("remove 100 :: " + ht.delete(100));
+console.log("Value at key 100 :: " + ht.get(100));
+console.log("Remove 100 :: " + ht.delete(100));
+console.log("Search 100 :: " + ht.find(100));
+console.log("Remove 100 :: " + ht.delete(100));
+
+for (var i = 2; i < 190;) {
+    ht.delete(i);
+    i += 11
+}
+ht.print()

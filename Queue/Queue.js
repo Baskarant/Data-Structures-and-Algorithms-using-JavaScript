@@ -23,7 +23,7 @@ Queue.prototype.remove = function () {
     var value;
     if (this.size <= 0) {
         console.log("Queue is empty.");
-        return -999;
+        return 0;
     }
     else {
         this.size--;
@@ -46,5 +46,5 @@ for (var i = 0; i < 20; i++) {
     que.add(i);
 }
 for (var i = 0; i < 22; i++) {
-    console.log(que.remove());
+    process.stdout.write(que.remove() + " ");
 }

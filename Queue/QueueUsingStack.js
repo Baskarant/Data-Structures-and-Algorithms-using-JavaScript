@@ -3,11 +3,20 @@ function Queue() {
     this.stk2 = [];
 }
 
-Queue.prototype.add = function (value) {
+Queue.prototype.length = function(value) {
+    return (this.stk1.length + this.stk2.length);
+};
+
+
+Queue.prototype.isEmpty = function(value) {
+    return (this.stk1.length + this.stk2.length) === 0;
+};
+
+Queue.prototype.add = function(value) {
     this.stk1.push(value);
 };
 
-Queue.prototype.remove = function () {
+Queue.prototype.remove = function() {
     var value;
     if (this.stk2.length > 0) {
         return this.stk2.pop();
@@ -27,8 +36,6 @@ console.log(que.remove());
 que.add(2);
 que.add(21);
 que.add(211);
-console.log(que.remove());
-console.log(que.remove());
 console.log(que.remove());
 console.log(que.remove());
 console.log(que.remove());

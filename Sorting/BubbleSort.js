@@ -1,51 +1,50 @@
-function BubbleSort(array) {
-    this.arr = array;
-}
-
-BubbleSort.prototype.less = function (value1, value2) {
-    return value1 < value2;
-};
-
-BubbleSort.prototype.more = function (value1, value2) {
-    return value1 > value2;
-};
-
-BubbleSort.prototype.sort = function () {
-    var size = this.arr.length;
-    var i;
-    var j;
+bubbleSort = function(arr, compare) {
+    var size = arr.length;
     var temp;
-    for (i = 0; i < (size - 1); i++) {
-        for (j = 0; j < size - i - 1; j++) {
-            if (this.more(this.arr[j], this.arr[j + 1])) {
-                temp = this.arr[j];
-                this.arr[j] = this.arr[j + 1];
-                this.arr[j + 1] = temp;
+    for (var i = 0; i < (size - 1); i++) {
+        for (var j = 0; j < size - i - 1; j++) {
+            if (compare(arr[j], arr[j + 1])) {
+                temp = arr[j];
+                arr[j] = arr[j + 1];
+                arr[j + 1] = temp;
             }
         }
     }
 };
 
-BubbleSort.prototype.sort2 = function () {
-    var size = this.arr.length;
-    var i;
-    var j;
+bubbleSort2 = function(arr, compare) {
+    var size = arr.length;
     var temp;
     var swapped = 1;
-    for (i = 0; i < (size - 1) && swapped === 1; i++) {
+    for (var i = 0; i < (size - 1) && swapped === 1; i++) {
         swapped = 0;
-        for (j = 0; j < size - i - 1; j++) {
-            if (this.more(this.arr[j], this.arr[j + 1])) {
-                temp = this.arr[j];
-                this.arr[j] = this.arr[j + 1];
-                this.arr[j + 1] = temp;
+        for (var j = 0; j < size - i - 1; j++) {
+            if (compare(arr[j], arr[j + 1])) {
+                temp = arr[j];
+                arr[j] = arr[j + 1];
+                arr[j + 1] = temp;
                 swapped = 1;
             }
         }
     }
 };
 
+less = function(value1, value2) {
+    return value1 < value2;
+};
+
+more = function(value1, value2) {
+    return value1 > value2;
+};
+
 var array = [9, 1, 8, 2, 7, 3, 6, 4, 5];
-var bs = new BubbleSort(array);
-bs.sort2();
+bubbleSort(array, more);
 console.log(array);
+
+var array2 = [9, 1, 8, 2, 7, 3, 6, 4, 5];
+bubbleSort(array2, less);
+console.log(array2);
+
+var array3 = [9, 1, 8, 2, 7, 3, 6, 4, 5];
+bubbleSort2(array3, more);
+console.log(array3);

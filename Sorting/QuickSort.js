@@ -1,16 +1,22 @@
-function QuickSort(array) {
-    this.arr = array;
-}
 
-QuickSort.prototype.swap = function (arr, first, second) {
+less = function(value1, value2) {
+    return value1 < value2;
+};
+
+more = function(value1, value2) {
+    return value1 > value2;
+};
+
+swap = function(arr, first, second) {
     var temp = arr[first];
     arr[first] = arr[second];
     arr[second] = temp;
 };
 
-QuickSort.prototype.quickSortUtil = function (arr, lower, upper) {
+quickSortUtil = function(arr, lower, upper) {
     if (upper <= lower)
         return;
+
     var pivot = arr[lower];
     var start = lower;
     var stop = upper;
@@ -22,20 +28,19 @@ QuickSort.prototype.quickSortUtil = function (arr, lower, upper) {
             upper--;
         };
         if (lower < upper) {
-            this.swap(arr, upper, lower);
+            swap(arr, upper, lower);
         }
     };
-    this.swap(arr, upper, start);
-    this.quickSortUtil(arr, start, upper - 1);
-    this.quickSortUtil(arr, upper + 1, stop);
+    swap(arr, upper, start);
+    quickSortUtil(arr, start, upper - 1);
+    quickSortUtil(arr, upper + 1, stop);
 };
 
-QuickSort.prototype.sort = function () {
-    var size = this.arr.length;
-    this.quickSortUtil(this.arr, 0, size - 1);
+quickSort = function(arr) {
+    var size = arr.length;
+    quickSortUtil(arr, 0, size - 1);
 };
 
 var array = [3, 4, 2, 1, 6, 5, 7, 8, 1, 1];
-var m = new QuickSort(array);
-m.sort();
+quickSort(array);
 console.log(array);

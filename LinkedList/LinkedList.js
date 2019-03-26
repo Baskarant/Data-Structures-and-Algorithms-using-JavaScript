@@ -1,55 +1,57 @@
-function LinkedListNode(v, n) {
-    this.value = v;
-    this.next = n;
-}
-
 function LinkedList() {
+    function Node(v, n) {
+        this.value = v;
+        this.next = n;
+    }
+
     this.length = 0;
+    LinkedList.Node = Node
 }
 
-LinkedList.prototype.size = function () {
+LinkedList.prototype.size = function() {
     return this.length;
 };
 
-LinkedList.prototype.isEmpty = function () {
+LinkedList.prototype.isEmpty = function() {
     return this.length === 0;
 };
 
-LinkedList.prototype.peek = function () {
+LinkedList.prototype.peek = function() {
     if (this.isEmpty())
         throw new Error("EmptyListError");
     return this.head.value;
 };
 
-LinkedList.prototype.addHead = function (value) {
-    this.head = new LinkedListNode(value, this.head);
+LinkedList.prototype.addHead = function(value) {
+    this.head = new LinkedList.Node(value, this.head);
     this.length++;
 };
 
-LinkedList.prototype.addTail = function (value) {
-    var newNode = new LinkedListNode(value, null);
+LinkedList.prototype.addTail = function(value) {
+    var newNode = new LinkedList.Node(value, null);
     var curr = this.head;
     if (this.head == null) {
         this.head = newNode;
     }
-    while ((curr.next != null)) {
+    while (curr.next != null) {
         curr = curr.next;
     };
     curr.next = newNode;
 };
 
-LinkedList.prototype.removeHead = function () {
+LinkedList.prototype.removeHead = function() {
     if (this.isEmpty())
         throw new Error("EmptyListError");
+    
     var value = this.head.value;
     this.head = this.head.next;
     this.length--;
     return value;
 };
 
-LinkedList.prototype.isPresent = function (data) {
+LinkedList.prototype.isPresent = function(data) {
     var temp = this.head;
-    while ((temp != null)) {
+    while (temp != null) {
         if (temp.value === data)
             return true;
         temp = temp.next;
@@ -57,16 +59,18 @@ LinkedList.prototype.isPresent = function (data) {
     return false;
 };
 
-LinkedList.prototype.deleteNode = function (delValue) {
+LinkedList.prototype.deleteNode = function(delValue) {
     var temp = this.head;
     if (this.isEmpty())
         return false;
+    
     if (delValue === this.head.value) {
         this.head = this.head.next;
         this.length--;
         return true;
     }
-    while ((temp.next != null)) {
+    
+    while (temp.next != null) {
         if (temp.next.value === delValue) {
             temp.next = temp.next.next;
             this.length--;
@@ -77,15 +81,15 @@ LinkedList.prototype.deleteNode = function (delValue) {
     return false;
 };
 
-LinkedList.prototype.deleteNodes = function (delValue) {
+LinkedList.prototype.deleteNodes = function(delValue) {
     var currNode = this.head;
     var nextNode;
-    while ((currNode != null && currNode.value === delValue)) {
+    while (currNode != null && currNode.value === delValue) {
         this.head = currNode.next;
         currNode = this.head;
-    }
-    ;
-    while ((currNode != null)) {
+    };
+    
+    while (currNode != null) {
         nextNode = currNode.next;
         if (nextNode != null && nextNode.value === delValue) {
             currNode.next = nextNode.next;
@@ -96,28 +100,28 @@ LinkedList.prototype.deleteNodes = function (delValue) {
     };
 };
 
-LinkedList.prototype.reverseRecurseUtil = function (currentNode, nextNode) {
-    var ret;
+LinkedList.prototype.reverseRecurseUtil = function(currentNode, nextNode) {
     if (currentNode == null)
         return null;
+    
     if (currentNode.next == null) {
         currentNode.next = nextNode;
         return currentNode;
     }
-    ret = this.reverseRecurseUtil(currentNode.next, currentNode);
+    var ret = this.reverseRecurseUtil(currentNode.next, currentNode);
     currentNode.next = nextNode;
     return ret;
 };
 
-LinkedList.prototype.reverseRecurse = function () {
+LinkedList.prototype.reverseRecurse = function() {
     this.head = this.reverseRecurseUtil(this.head, null);
 };
 
-LinkedList.prototype.reverse = function () {
+LinkedList.prototype.reverse = function() {
     var curr = this.head;
     var prev = null;
     var next = null;
-    while ((curr != null)) {
+    while (curr != null) {
         next = curr.next;
         curr.next = prev;
         prev = curr;
@@ -127,12 +131,12 @@ LinkedList.prototype.reverse = function () {
     this.head = prev;
 };
 
-LinkedList.prototype.CopyListReversed = function () {
+LinkedList.prototype.CopyListReversed = function() {
     var tempNode = null;
     var tempNode2 = null;
     var curr = this.head;
-    while ((curr != null)) {
-        tempNode2 = new LinkedListNode(curr.value, tempNode);
+    while (curr != null) {
+        tempNode2 = new LinkedList.Node(curr.value, tempNode);
         curr = curr.next;
         tempNode = tempNode2;
     };
@@ -141,18 +145,18 @@ LinkedList.prototype.CopyListReversed = function () {
     return ll2;
 };
 
-LinkedList.prototype.copyList = function () {
+LinkedList.prototype.copyList = function() {
     var headNode = null;
     var tailNode = null;
     var tempNode = null;
     var curr = this.head;
     if (curr == null)
         return null;
-    headNode = new LinkedListNode(curr.value, null);
+    headNode = new LinkedList.Node(curr.value, null);
     tailNode = headNode;
     curr = curr.next;
-    while ((curr != null)) {
-        tempNode = new LinkedListNode(curr.value, null);
+    while (curr != null) {
+        tempNode = new LinkedList.Node(curr.value, null);
         tailNode.next = tempNode;
         tailNode = tempNode;
         curr = curr.next;
@@ -162,46 +166,59 @@ LinkedList.prototype.copyList = function () {
     return ll2;
 };
 
-LinkedList.prototype.compareList = function (ll) {
+LinkedList.prototype.compareList = function(ll) {
     return this.compareListUtil(this.head, ll.head);
 };
 
-LinkedList.prototype.compareListUtil = function (head1, head2) {
-    if (((head1 != null && head1 instanceof LinkedListNode) || head1 === null) && ((head2 != null && head2 instanceof LinkedListNode) || head2 === null)) {
-        if (head1 == null && head2 == null)
-            return true;
-        else if ((head1 == null) || (head2 == null) || (head1.value !== head2.value))
-            return false;
-        else
-            return this.compareListUtil(head1.next, head2.next);
-    }
+LinkedList.prototype.compareListUtil = function(head1, head2) {
+    if (head1 == null && head2 == null)
+        return true;
+    else if ((head1 == null) || (head2 == null) || (head1.value !== head2.value))
+        return false;
     else
-        throw new Error('invalid arguments');
+        return this.compareListUtil(head1.next, head2.next);
+
 };
 
-LinkedList.prototype.findLength = function () {
+LinkedList.prototype.compareList2 = function(ll2) {
+    var head1 = this.head;
+    var head2 = ll2.head;
+    while (head1 == null &&
+        head2 == null) {
+        if (head1.value !== head2.value)
+            return false;
+        head1 = head1.next;
+        head2 = head2.next;
+    }
+    if (head1 == null && head2 == null)
+        return true;
+    return false;
+};
+
+
+LinkedList.prototype.findLength = function() {
     var curr = this.head;
     var count = 0;
-    while ((curr != null)) {
+    while (curr != null) {
         count++;
         curr = curr.next;
     };
     return count;
 };
 
-LinkedList.prototype.nthNodeFromBegining = function (index) {
+LinkedList.prototype.nthNodeFromBegining = function(index) {
     if (index > this.size() || index < 1)
         throw new Error('invalid arguments');;
     var count = 0;
     var curr = this.head;
-    while ((curr != null && count < index - 1)) {
+    while (curr != null && count < index - 1) {
         count++;
         curr = curr.next;
     };
     return curr.value;
 };
 
-LinkedList.prototype.nthNodeFromEnd = function (index) {
+LinkedList.prototype.nthNodeFromEnd = function(index) {
     var size = this.findLength();
     var startIndex;
     if (size !== 0 && size < index) {
@@ -211,33 +228,35 @@ LinkedList.prototype.nthNodeFromEnd = function (index) {
     return this.nthNodeFromBegining(startIndex);
 };
 
-LinkedList.prototype.nthNodeFromEnd2 = function (index) {
+LinkedList.prototype.nthNodeFromEnd2 = function(index) {
     var count = 1;
     var forward = this.head;
     var curr = this.head;
-    while ((forward != null && count <= index)) {
+    while (forward != null && count <= index) {
         count++;
         forward = forward.next;
     };
     if (forward == null)
         throw new Error('invalid arguments');
-    while ((forward != null)) {
+    
+    while (forward != null) {
         forward = forward.next;
         curr = curr.next;
     };
     return curr.value;
 };
 
-LinkedList.prototype.findIntersection = function (head, head2) {
+LinkedList.prototype.findIntersection = function(head, head2) {
     var l1 = 0;
     var l2 = 0;
     var tempHead = head;
     var tempHead2 = head2;
-    while ((tempHead != null)) {
+    while (tempHead != null) {
         l1++;
         tempHead = tempHead.next;
     };
-    while ((tempHead2 != null)) {
+    
+    while (tempHead2 != null) {
         l2++;
         tempHead2 = tempHead2.next;
     };
@@ -254,44 +273,45 @@ LinkedList.prototype.findIntersection = function (head, head2) {
     for (; diff > 0; diff--) {
         head = head.next;
     }
-    while ((head !== head2)) {
+    while (head !== head2) {
         head = head.next;
         head2 = head2.next;
     };
     return head;
 };
 
-LinkedList.prototype.freeList = function () {
+LinkedList.prototype.freeList = function() {
     this.head = null;
     this.length = 0;
 };
 
-LinkedList.prototype.print = function () {
+LinkedList.prototype.print = function() {
     var temp = this.head;
-    while ((temp != null)) {
-        console.log(temp.value + " ");
+    while (temp != null) {
+        process.stdout.write(temp.value + " ");
         temp = temp.next;
     };
+    process.stdout.write("\n");
 };
 
-LinkedList.prototype.sortedInsert = function (value) {
-    var newNode = new LinkedListNode(value, null);
+LinkedList.prototype.sortedInsert = function(value) {
+    var newNode = new LinkedList.Node(value, null);
     var curr = this.head;
     if (curr == null || curr.value > value) {
         newNode.next = this.head;
         this.head = newNode;
         return;
     }
-    while ((curr.next != null && curr.next.value < value)) {
+    while (curr.next != null && curr.next.value < value) {
         curr = curr.next;
     };
     newNode.next = curr.next;
     curr.next = newNode;
 };
 
-LinkedList.prototype.removeDuplicate = function () {
+LinkedList.prototype.removeDuplicate = function() {
     var curr = this.head;
-    while ((curr != null)) {
+    while (curr != null) {
         if (curr.next != null && curr.value === curr.next.value) {
             curr.next = curr.next.next;
         }
@@ -301,23 +321,22 @@ LinkedList.prototype.removeDuplicate = function () {
     };
 };
 
-LinkedList.prototype.makeLoop = function () {
+LinkedList.prototype.makeLoop = function() {
     var temp = this.head;
-    while ((temp != null)) {
+    while (temp != null) {
         if (temp.next == null) {
             temp.next = this.head;
             return;
         }
         temp = temp.next;
-    }
-    ;
+    };
 };
 
-LinkedList.prototype.loopDetect = function () {
+LinkedList.prototype.loopDetect = function() {
     var slowPtr;
     var fastPtr;
     slowPtr = fastPtr = this.head;
-    while ((fastPtr.next != null && fastPtr.next.next != null)) {
+    while (fastPtr.next != null && fastPtr.next.next != null) {
         slowPtr = slowPtr.next;
         fastPtr = fastPtr.next.next;
         if (slowPtr === fastPtr) {
@@ -329,7 +348,7 @@ LinkedList.prototype.loopDetect = function () {
     return false;
 };
 
-LinkedList.prototype.reverseListLoopDetect = function () {
+LinkedList.prototype.reverseListLoopDetect = function() {
     var tempHead = this.head;
     this.reverse();
     if (tempHead === this.head) {
@@ -344,11 +363,10 @@ LinkedList.prototype.reverseListLoopDetect = function () {
     }
 };
 
-LinkedList.prototype.loopTypeDetect = function () {
-    var slowPtr;
-    var fastPtr;
-    slowPtr = fastPtr = this.head;
-    while ((fastPtr.next != null && fastPtr.next.next != null)) {
+LinkedList.prototype.loopTypeDetect = function() {
+    var slowPtr = this.head;
+    var fastPtr = this.head;
+    while (fastPtr.next != null && fastPtr.next.next != null) {
         if (this.head === fastPtr.next || this.head === fastPtr.next.next) {
             console.log("circular list loop found");
             return 2;
@@ -364,11 +382,10 @@ LinkedList.prototype.loopTypeDetect = function () {
     return 0;
 };
 
-LinkedList.prototype.loopPointDetect = function () {
-    var slowPtr;
-    var fastPtr;
-    slowPtr = fastPtr = this.head;
-    while ((fastPtr.next != null && fastPtr.next.next != null)) {
+LinkedList.prototype.loopPointDetect = function() {
+    var slowPtr = this.head;
+    var fastPtr = this.head;
+    while (fastPtr.next != null && fastPtr.next.next != null) {
         slowPtr = slowPtr.next;
         fastPtr = fastPtr.next.next;
         if (slowPtr === fastPtr) {
@@ -378,37 +395,30 @@ LinkedList.prototype.loopPointDetect = function () {
     return null;
 };
 
-LinkedList.prototype.removeLoop = function () {
+LinkedList.prototype.removeLoop = function() {
     var loopPoint = this.loopPointDetect();
     if (loopPoint == null)
         return;
     var firstPtr = this.head;
     if (loopPoint === this.head) {
-        while ((firstPtr.next !== this.head))
+        while (firstPtr.next !== this.head)
             firstPtr = firstPtr.next;
         firstPtr.next = null;
         return;
     }
     var secondPtr = loopPoint;
-    while ((firstPtr.next !== secondPtr.next)) {
+    while (firstPtr.next !== secondPtr.next) {
         firstPtr = firstPtr.next;
         secondPtr = secondPtr.next;
     };
     secondPtr.next = null;
 };
 
-
-
-main = function (args) {
+main = function() {
     var ll = new LinkedList();
-    ll.addHead(1);
-    ll.addHead(2);
-    ll.addHead(3);
-    ll.addHead(3);
-    ll.addHead(3);
-    ll.addHead(3);
-    ll.addHead(3);
-    ll.addHead(3);
+    for (var i = 0; i < 10; i++) {
+        ll.addHead(i);
+    }
     ll.print();
     ll.reverseRecurse();
     ll.print();
@@ -417,4 +427,4 @@ main = function (args) {
     console.log(ll.nthNodeFromEnd2(2));
 };
 
-main(null);
+main();

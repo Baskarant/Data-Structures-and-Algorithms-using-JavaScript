@@ -1,21 +1,16 @@
 function Trie() {
     function Node(c) {
-        this.isLastChar = false;
-        this.ch = null;
-        this.child = new Array(Trie.CharCount);
-        for (var i = 0; i < Trie.CharCount; i++) {
-            this.child[i] = null;
-        }
+        this.child = new Array(Trie.CharCount).fill(null);
         this.isLastChar = false;
         this.ch = c;
     }
+
     Trie.Node = Node;
     Trie.CharCount = 26;
-
     this.root = new Trie.Node(' ');
 }
 
-Trie.prototype.Insert = function (str) {
+Trie.prototype.Insert = function(str) {
     if (str == null) {
         return this.root;
     }
@@ -23,24 +18,20 @@ Trie.prototype.Insert = function (str) {
     return this.InsertUtil(this.root, temp, 0);
 };
 
-Trie.prototype.InsertUtil = function (curr, str, index) {
-    if (((curr != null && curr instanceof Trie.Node) || curr === null) && ((typeof str === 'string') || str === null) && (typeof index === 'number')) {
-        if (curr == null) {
-            curr = new Trie.Node(this, str[index - 1]);
-        }
-        if (str.length === index) {
-            curr.isLastChar = true;
-        }
-        else {
-            curr.child[str[index].charCodeAt(0) - 'a'.charCodeAt(0)] = this.InsertUtil(curr.child[str[index].charCodeAt(0) - 'a'.charCodeAt(0)], str, index + 1);
-        }
-        return curr;
+Trie.prototype.InsertUtil = function(curr, str, index) {
+    if (curr == null) {
+        curr = new Trie.Node(this, str[index - 1]);
     }
-    else
-        throw new Error('invalid arguments');
+    if (str.length === index) {
+        curr.isLastChar = true;
+    }
+    else {
+        curr.child[str[index].charCodeAt(0) - 'a'.charCodeAt(0)] = this.InsertUtil(curr.child[str[index].charCodeAt(0) - 'a'.charCodeAt(0)], str, index + 1);
+    }
+    return curr;
 };
 
-Trie.prototype.Remove = function (str) {
+Trie.prototype.Remove = function(str) {
     if (str == null) {
         return;
     }
@@ -48,24 +39,20 @@ Trie.prototype.Remove = function (str) {
     this.RemoveUtil(this.root, str, 0);
 };
 
-Trie.prototype.RemoveUtil = function (curr, str, index) {
-    if (((curr != null && curr instanceof Trie.Node) || curr === null) && ((typeof str === 'string') || str === null) && (typeof index === 'number')) {
-        if (curr == null) {
-            return;
-        }
-        if (str.length === index) {
-            if (curr.isLastChar) {
-                curr.isLastChar = false;
-            }
-            return;
-        }
-        this.RemoveUtil(curr.child[str[index].charCodeAt(0) - 'a'.charCodeAt(0)], str, index + 1);
+Trie.prototype.RemoveUtil = function(curr, str, index) {
+    if (curr == null) {
+        return;
     }
-    else
-        throw new Error('invalid overload');
+    if (str.length === index) {
+        if (curr.isLastChar) {
+            curr.isLastChar = false;
+        }
+        return;
+    }
+    this.RemoveUtil(curr.child[str[index].charCodeAt(0) - 'a'.charCodeAt(0)], str, index + 1);
 };
 
-Trie.prototype.Find = function (str) {
+Trie.prototype.Find = function(str) {
     if (str == null) {
         return false;
     }
@@ -73,18 +60,14 @@ Trie.prototype.Find = function (str) {
     return this.FindUtil(this.root, str, 0);
 };
 
-Trie.prototype.FindUtil = function (curr, str, index) {
-    if (((curr != null && curr instanceof Trie.Node) || curr === null) && (typeof str === 'string') && (typeof index === 'number')) {
-        if (curr == null) {
-            return false;
-        }
-        if (str.length === index) {
-            return curr.isLastChar;
-        }
-        return this.FindUtil(curr.child[str[index].charCodeAt(0) - 'a'.charCodeAt(0)], str, index + 1);
+Trie.prototype.FindUtil = function(curr, str, index) {
+    if (curr == null) {
+        return false;
     }
-    else
-        throw new Error('invalid overload');
+    if (str.length === index) {
+        return curr.isLastChar;
+    }
+    return this.FindUtil(curr.child[str[index].charCodeAt(0) - 'a'.charCodeAt(0)], str, index + 1);
 };
 
 var t = new Trie();
